@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  beanstalkd:
+    image: 542516710673.dkr.ecr.eu-central-1.amazonaws.com/beanstalkd:latest
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: beanstalkd-ecs
+        awslogs-region: eu-central-1
+        awslogs-stream-prefix: beanstalkd
+
+  beanstalkd-publisher:
+    image: 542516710673.dkr.ecr.eu-central-1.amazonaws.com/beanstalkd-publisher:latest
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: beanstalkd-ecs
+        awslogs-region: eu-central-1
+        awslogs-stream-prefix: beanstalkd-publisher
+    links:
+      - beanstalkd
+    ports:
+      - "80:80"
+
+  beanstalkd-subscriber:
+    image: 542516710673.dkr.ecr.eu-central-1.amazonaws.com/beanstalkd-subscriber:latest
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: beanstalkd-ecs
+        awslogs-region: eu-central-1
+        awslogs-stream-prefix: beanstalkd-subscriber
+    links:
+      - beanstalkd
